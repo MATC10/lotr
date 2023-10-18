@@ -20,19 +20,12 @@ public class SauronWarrior extends Warriors implements Runnable{
     public void run() {
         while (true){
             //TODO SE PODRÍA PONER PARA CONSUMIR ENERGÍA SOLAMENTE CUANDO LE QUEDE 0
-                try {
-                    orcPotionProduct.consumeOrcPotion(this);
-                } catch (Exception e) {
-                    System.out.println("Error al consumir poción");
-                }
 
-
-
-
-
-
+            try {
+                orcPotionProduct.consumeOrcPotion(this);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-
     }
 }

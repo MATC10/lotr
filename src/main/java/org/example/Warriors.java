@@ -5,9 +5,9 @@ import java.util.concurrent.Semaphore;
 public abstract class Warriors {
     private String name;
     private float energy;
-    private Semaphore shield;
-    private Semaphore sword;
-    private Semaphore dagger;
+    private volatile Semaphore shield;
+    private volatile Semaphore sword;
+    private volatile Semaphore dagger;
 
     public Warriors(String name, float energy, Semaphore shield, Semaphore sword, Semaphore dagger) {
         this.name = name;

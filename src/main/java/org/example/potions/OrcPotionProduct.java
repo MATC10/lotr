@@ -33,15 +33,18 @@ public class OrcPotionProduct {
         sauronWarrior.setEnergy(sauronWarrior.getEnergy() + 3);
 
 
-        notify();
+
 
         //TODO PUEDE QUE TENGA QUE PONER EL SLEEP ANTES EN LUGAR DE DESPUÉS DE RESTAR Y SUMAR
         //Cuando se va a por la poción el guerrero tarda 2 segundos en cogerla
         Thread.sleep(2000);
 
+        notify();
+
         //lanzamos mensaje para anunciar la recarga de energía
-        System.out.printf("El guerrero de sauron %s ha recargado energía y tiene ahora %d",
+        System.out.printf("El guerrero de sauron %s ha recargado energía y tiene ahora %f\n",
                 sauronWarrior.getName(), sauronWarrior.getEnergy());
+
 
     }
 
@@ -58,15 +61,17 @@ public class OrcPotionProduct {
         // la cantidad será siempre 5 y el resto se desbordará y caerá al suelo
         if(this.quantity > MAX_QUANTITY) this.quantity = 5;
 
-        notify();
+
 
 
         //TODO PUEDE QUE TENGA QUE PONER EL SLEEP ANTES EN LUGAR DE DESPUÉS DE RESTAR Y SUMAR
         //espera 1 segundo para volver a generar
         Thread.sleep(1000);
 
+        notify();
+
         //lanzamos mensaje para anunciar la recarga de poción
-        System.out.printf("El Orco %s ha recargado la poción, tiene ahora %d",
+        System.out.printf("%s ha recargado la poción, tiene ahora %f\n",
                 orc.getName(), this.getQuantity());
 
     }
