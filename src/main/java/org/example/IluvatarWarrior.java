@@ -17,10 +17,13 @@ public class IluvatarWarrior extends Warriors implements Runnable {
 
     @Override
     public void run() {
-        try {
-            istariBookProduct.consumeIstariBook(this);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        while (true) {
+            try {
+                istariBookProduct.consumeIstariBook(this);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 }

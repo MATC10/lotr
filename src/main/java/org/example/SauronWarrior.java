@@ -26,6 +26,13 @@ public class SauronWarrior extends Warriors implements Runnable{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+
+
+
+
+
+
         }
     }
 }
