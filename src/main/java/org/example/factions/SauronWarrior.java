@@ -36,7 +36,6 @@ public class SauronWarrior extends Warrior implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
             //TODO SE PODRÍA PONER PARA CONSUMIR ENERGÍA SOLAMENTE CUANDO LE QUEDE 0
 
             try {
@@ -61,32 +60,21 @@ public class SauronWarrior extends Warrior implements Runnable {
                     (swordSauron.availablePermits() > 0) && daggerSauron.availablePermits() > 0) {
                 TomBombadil.getBattleArray()[0] = this;
 
-                if (TomBombadil.getBattleArray()[0] != null && TomBombadil.getBattleArray()[1] != null) {
-                    synchronized (lock) {
-                        lock.notify(); // Notificar que el array está lleno
-                    }
-                }
-
 
                 try {
-                    System.out.println("SAURON espada" + this.swordSauron.availablePermits() + "escudo" + this.shieldSauron.availablePermits() + "daga" + this.daggerSauron.availablePermits() +" " + this.getName());
-
                     if(TomBombadil.getBattleArray()[0] == null || TomBombadil.getBattleArray()[1] == null){
                         synchronized (lock){
                             lock.wait();
                         }
                     }
 
-
-                    System.out.println("LLEGAAAA2");
-                    sauronBattle.acquire();
-
-
-
+                    if (TomBombadil.getBattleArray()[0] != null && TomBombadil.getBattleArray()[1] != null) {
+                        synchronized (lock) {
+                            lock.notify(); // Notificar que el array está lleno
+                        }
+                    }
                     //Esperamos a que la cuenta llegue a 0 para entrar
                     arrayFull.countDown();
-
-
 
 
 
@@ -95,15 +83,18 @@ public class SauronWarrior extends Warrior implements Runnable {
 
                     sauronBattle.release();
 
+
+
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                shieldSauron.release();
+                swordSauron.release();
+                daggerSauron.release();
             }
-            shieldSauron.release();
-            swordSauron.release();
-            daggerSauron.release();
+
 
 
         }
-    }
+
 }

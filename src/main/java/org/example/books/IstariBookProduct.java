@@ -31,7 +31,7 @@ public class IstariBookProduct {
     }
 
     public void consumeIstariBook(IluvatarWarrior iluvatarWarrior) {
-        while (!getIstariBook().isEmpty()){
+        if (!getIstariBook().isEmpty()){
             try {
             access.acquire();
 
@@ -41,9 +41,9 @@ public class IstariBookProduct {
             System.out.printf("El guerrero de Ilúvatar %s ha recargado energía y tiene ahora %f\n",
                     iluvatarWarrior.getName(), iluvatarWarrior.getEnergy());
 
-                access.release();
-            Thread.sleep(5000);
 
+            Thread.sleep(5000);
+                access.release();
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -64,15 +64,12 @@ public class IstariBookProduct {
             System.out.printf("%s ha escrito una nueva página en el libro, tiene ahora %d páginas\n",
                     istari.getName(), istariBook.size());
 
-            //deja los permisos libres para otros
-            access.release(3);
 
         //TODO PUEDO QUE ESTO TENGA QUE PONERLO LO PRIMERO
-        Thread.sleep((10000));
+            access.release(3);
 
-
-
-
+            //deja los permisos libres para otros
+            Thread.sleep((10000));
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -90,7 +87,4 @@ public class IstariBookProduct {
         Random random = new Random();
         return random.nextInt(istariBook.size());
     }
-
-
-
 }

@@ -21,6 +21,7 @@ public  class Battle {
         TomBombadil.compareEnergy();
 
         try {
+
             arrayFull.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

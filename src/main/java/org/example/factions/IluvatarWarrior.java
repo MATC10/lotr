@@ -45,54 +45,57 @@ public class IluvatarWarrior extends Warrior implements Runnable {
                 shieldIluvatar.acquire();
                 swordIluvatar.acquire();
                 daggerIluvatar.acquire();
-                System.out.println("ILUVATAR espada" + this.swordIluvatar.availablePermits() + "escudo" + this.shieldIluvatar.availablePermits() + "daga" + this.daggerIluvatar.availablePermits() +" " + this.getName());
 
 
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
 
             if(this.getEnergy() > 0 && (shieldIluvatar.availablePermits () > 0) &&
                     (swordIluvatar.availablePermits() > 0) && daggerIluvatar.availablePermits() > 0){
                 TomBombadil.getBattleArray()[1] = this;
 
-                if (TomBombadil.getBattleArray()[0] != null && TomBombadil.getBattleArray()[1] != null) {
-                    synchronized (lock) {
-                        lock.notify(); // Notificar que el array está lleno
-                    }
-                }
-
                 try {
-                    System.out.println("LLEGAAAA1");
                     if(TomBombadil.getBattleArray()[0] == null || TomBombadil.getBattleArray()[1] == null){
                         synchronized (lock){
                             lock.wait();
                         }
                     }
 
-
-
-                    System.out.println("LLEGAAAA2");
-                    iluvatarBattle.acquire();
-
+                    //la array está llena
+                    if (TomBombadil.getBattleArray()[0] != null && TomBombadil.getBattleArray()[1] != null) {
+                        synchronized (lock) {
+                            lock.notify();
+                        }
+                    }
 
                     arrayFull.countDown();
 
 
+                    iluvatarBattle.acquire();
+
+
+
+
+
                     this.battle.battle();
                     this.setEnergy(0);
+
 
                     iluvatarBattle.release();
 
                 }   catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
+
+                shieldIluvatar.release();
+                swordIluvatar.release();
+                daggerIluvatar.release();
             }
 
-            shieldIluvatar.release();
-            swordIluvatar.release();
-            daggerIluvatar.release();
+
 
         }
     }
