@@ -1,18 +1,13 @@
 package org.example.books;
 
-import org.example.potions.OrcPotionProduct;
-
-import java.util.concurrent.Semaphore;
 
 public class Istari  implements Runnable{
     private String name;
     private IstariBookProduct istariBookProduct;
-    private volatile Semaphore access;
 
-    public Istari(String name, IstariBookProduct istariBookProduct, Semaphore access) {
+    public Istari(String name, IstariBookProduct istariBookProduct) {
         this.name = name;
         this.istariBookProduct = istariBookProduct;
-        this.access = access;
     }
 
     public String getName() {

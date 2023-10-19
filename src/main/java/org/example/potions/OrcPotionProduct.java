@@ -1,6 +1,6 @@
 package org.example.potions;
 
-import org.example.SauronWarrior;
+import org.example.factions.SauronWarrior;
 
 public class OrcPotionProduct {
     private float quantity;

@@ -1,16 +1,23 @@
 package org.example;
 
+import org.example.battle.Battle;
+import org.example.battle.TomBombadil;
 import org.example.books.Istari;
 import org.example.books.IstariBookProduct;
+import org.example.factions.IluvatarWarrior;
+import org.example.factions.SauronWarrior;
 import org.example.potions.Orc;
 import org.example.potions.OrcPotionProduct;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
-
-import static org.example.Warriors.*;
 
 public class Main {
     public static void main(String[] args) {
+
+        //Contador para que esperen los hilos en el array hasta que esté llena
+        CountDownLatch arrayFull = new CountDownLatch(TomBombadil.getBattleArray().length);
+
         Semaphore access = new Semaphore(3);
         Semaphore shieldSauron = new Semaphore(3);
         Semaphore swordSauron = new Semaphore(3);
@@ -21,15 +28,21 @@ public class Main {
         Semaphore sauronBattle = new Semaphore(1);
         Semaphore iluvatarBattle = new Semaphore(1);
 
+        Thread tomBombadil = new Thread(new TomBombadil());
+        Battle battle = new Battle(arrayFull);
+
         //creamos las arrays de hilos
         Thread[] orcs = new Thread[3];
         Thread[] istari = new Thread[3];
         Thread[] sauronWarrior = new Thread[10];
         Thread[] iluvatarWarrior = new Thread[10];
 
+
         //inicializamos el libro y la poción de energía
         OrcPotionProduct orcPotionProduct = new OrcPotionProduct(0);
         IstariBookProduct istariBookProduct = new IstariBookProduct(access);
+
+
 
         //metemos en array a los orcos
         for(int i = 0; i < orcs.length; i++){
@@ -38,20 +51,23 @@ public class Main {
 
         //metemos en array a los istari
         for(int i = 0; i < istari.length; i++){
-            istari[i] = new Thread (new Istari("Istari" + (i+1), istariBookProduct,access));
+            istari[i] = new Thread (new Istari("Istari" + (i+1), istariBookProduct));
         }
 
         //metemos en array a los sauronWarriors
         for(int i = 0; i < sauronWarrior.length; i++){
             sauronWarrior[i] = new Thread (new SauronWarrior("SauronWarrior" + (i+1), 0,
-                    shieldSauron, swordSauron, daggerSauron, orcPotionProduct));
+                    shieldSauron, swordSauron, daggerSauron, orcPotionProduct, battle, sauronBattle, arrayFull));
         }
 
         //metemos en array a los iluvatarWarriors
         for(int i = 0; i < iluvatarWarrior.length; i++){
             iluvatarWarrior[i] = new Thread (new IluvatarWarrior("IluvatarWarrior" + (i+1), 0,
-                    shieldIluvatar, swordIluvatar, daggerIluvatar, istariBookProduct));
+                    shieldIluvatar, swordIluvatar, daggerIluvatar, istariBookProduct, battle, iluvatarBattle, arrayFull));
         }
+
+
+        tomBombadil.start();
 
         //inicializamos orcos
         for(Thread o : orcs){
@@ -72,9 +88,6 @@ public class Main {
         for(Thread il : iluvatarWarrior){
             il.start();
         }
-
-
-
 
     }
 }

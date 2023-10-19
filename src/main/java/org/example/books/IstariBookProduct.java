@@ -1,10 +1,7 @@
 package org.example.books;
 
-import org.example.IluvatarWarrior;
-import org.example.SauronWarrior;
-import org.example.potions.Orc;
+import org.example.factions.IluvatarWarrior;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +33,6 @@ public class IstariBookProduct {
     public void consumeIstariBook(IluvatarWarrior iluvatarWarrior) {
         while (!getIstariBook().isEmpty()){
             try {
-
             access.acquire();
 
             iluvatarWarrior.setEnergy(istariBook.get(randomNumberList()));
@@ -45,10 +41,9 @@ public class IstariBookProduct {
             System.out.printf("El guerrero de Ilúvatar %s ha recargado energía y tiene ahora %f\n",
                     iluvatarWarrior.getName(), iluvatarWarrior.getEnergy());
 
-
+                access.release();
             Thread.sleep(5000);
 
-            access.release();
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -69,11 +64,13 @@ public class IstariBookProduct {
             System.out.printf("%s ha escrito una nueva página en el libro, tiene ahora %d páginas\n",
                     istari.getName(), istariBook.size());
 
+            //deja los permisos libres para otros
+            access.release(3);
+
         //TODO PUEDO QUE ESTO TENGA QUE PONERLO LO PRIMERO
         Thread.sleep((10000));
 
-        //deja los permisos libres para otros
-        access.release(3);
+
 
 
 
