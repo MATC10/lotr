@@ -2,17 +2,14 @@ package org.example.battle;
 
 import org.example.factions.Warrior;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
-
-public class TomBombadil implements Runnable{
+public class TomBombadil extends Thread{
 
     private final String NAME = "Tom Bombadil";
-    private static int iluvatarVictories;
-    private static int sauronVictories;
-    private static int draw;
-    private static int totalFights;
-    private static final Warrior[] BATTLE_ARRAY = new Warrior[2];
+    private int iluvatarVictories;
+    private int sauronVictories;
+    private int draw;
+    private int totalFights;
+    private final Warrior[] battleArray = new Warrior[2];
 
 
 
@@ -30,56 +27,55 @@ public class TomBombadil implements Runnable{
         return NAME;
     }
 
-    public static int getIluvatarVictories() {
+    public int getIluvatarVictories() {
         return iluvatarVictories;
     }
 
-    public static void setIluvatarVictories(int iluvatarVictories) {
-        TomBombadil.iluvatarVictories = iluvatarVictories;
+    public void setIluvatarVictories(int iluvatarVictories) {
+        this.iluvatarVictories = iluvatarVictories;
     }
 
-    public static int getSauronVictories() {
+    public int getSauronVictories() {
         return sauronVictories;
     }
 
-    public static void setSauronVictories(int sauronVictories) {
-        TomBombadil.sauronVictories = sauronVictories;
+    public void setSauronVictories(int sauronVictories) {
+        this.sauronVictories = sauronVictories;
     }
 
-    public static int getDraw() {
+    public int getDraw() {
         return draw;
     }
 
-    public static void setDraw(int draw) {
-        TomBombadil.draw = draw;
+    public void setDraw(int draw) {
+        this.draw = draw;
     }
 
-    public static int getTotalFights() {
+    public int getTotalFights() {
         return totalFights;
     }
 
-    public static void setTotalFights(int totalFights) {
-        TomBombadil.totalFights = totalFights;
+    public void setTotalFights(int totalFights) {
+        this.totalFights = totalFights;
     }
 
-    public static Warrior[] getBattleArray() {
-        return BATTLE_ARRAY;
+    public Warrior[] getBattleArray() {
+        return battleArray;
+    }
+
+    public void run(){
+
     }
 
 
-
-    @Override
-    public void run() {
-    }
-
-    public static void compareEnergy(){
+    public void compareEnergy(){
         //sumamos 1 a las peleas totales
         setTotalFights(getTotalFights() + 1);
 
         if(getBattleArray()[0].getEnergy() > getBattleArray()[1].getEnergy()) {
             //victoria para los de sauron
 
-            System.out.printf("Gana %s con %f de energía, pierde %s con %f de energía\n", getBattleArray()[0].getName(),
+            System.out.printf("Gana %s con %.2f de energía, pierde %s con %.2f de energía\n", getBattleArray()[0].getName(),
                     getBattleArray()[0].getEnergy(), getBattleArray()[1].getName(), getBattleArray()[1].getEnergy());
 
             setSauronVictories(getSauronVictories() + 1);
@@ -89,7 +85,7 @@ public class TomBombadil implements Runnable{
         else if(getBattleArray()[0].getEnergy() < getBattleArray()[1].getEnergy()){
             //victoria para los de iluvatar
 
-            System.out.printf("Gana %s con %f de energía, pierde %s con %f de energía\n", getBattleArray()[1].getName(),
+            System.out.printf("Gana %s con %.2f de energía, pierde %s con %.2f de energía\n", getBattleArray()[1].getName(),
                     getBattleArray()[1].getEnergy(), getBattleArray()[0].getName(), getBattleArray()[0].getEnergy());
 
             setIluvatarVictories(getIluvatarVictories() + 1);
@@ -100,7 +96,7 @@ public class TomBombadil implements Runnable{
             //empate
             setDraw(getDraw() + 1);
 
-            System.out.printf("Empate entre %s con %f de energía y %s con %f de energía\n", getBattleArray()[0].getName(),
+            System.out.printf("Empate entre %s con %.2f de energía y %s con %.2f de energía\n", getBattleArray()[0].getName(),
                     getBattleArray()[0].getEnergy(), getBattleArray()[1].getName(), getBattleArray()[1].getEnergy());
 
         }

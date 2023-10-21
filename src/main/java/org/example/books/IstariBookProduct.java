@@ -11,7 +11,7 @@ public class IstariBookProduct {
 
     //volatile es para que los cambios en access sean visibles para todos los hilos
     private volatile Semaphore access;
-    private static List<Integer> istariBook = new LinkedList<>();
+    private List<Integer> istariBook = new LinkedList<>();
 
     public IstariBookProduct(Semaphore access){
         this.access = access;
@@ -26,8 +26,8 @@ public class IstariBookProduct {
 
 
 
-    public static void setIstariBook(List<Integer> istariBook) {
-        IstariBookProduct.istariBook = istariBook;
+    public void setIstariBook(List<Integer> istariBook) {
+        this.istariBook = istariBook;
     }
 
     public void consumeIstariBook(IluvatarWarrior iluvatarWarrior) {
@@ -38,7 +38,7 @@ public class IstariBookProduct {
             iluvatarWarrior.setEnergy(istariBook.get(randomNumberList()));
 
 
-            System.out.printf("El guerrero de Ilúvatar %s ha recargado energía y tiene ahora %f\n",
+            System.out.printf("El guerrero de Ilúvatar %s ha recargado energía y tiene ahora %.2f\n",
                     iluvatarWarrior.getName(), iluvatarWarrior.getEnergy());
 
 
@@ -65,7 +65,7 @@ public class IstariBookProduct {
                     istari.getName(), istariBook.size());
 
 
-        //TODO PUEDO QUE ESTO TENGA QUE PONERLO LO PRIMERO
+
             access.release(3);
 
             //deja los permisos libres para otros

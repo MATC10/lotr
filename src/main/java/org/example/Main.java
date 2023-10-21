@@ -15,8 +15,10 @@ import java.util.concurrent.Semaphore;
 public class Main {
     public static void main(String[] args) {
 
+        TomBombadil tomBombadil = new TomBombadil();
+
         //Contador para que esperen los hilos en el array hasta que esté llena
-        CountDownLatch arrayFull = new CountDownLatch(TomBombadil.getBattleArray().length);
+        CountDownLatch arrayFull = new CountDownLatch(tomBombadil.getBattleArray().length);
 
         Semaphore access = new Semaphore(3);
         Semaphore shieldSauron = new Semaphore(3);
@@ -28,8 +30,8 @@ public class Main {
         Semaphore sauronBattle = new Semaphore(1);
         Semaphore iluvatarBattle = new Semaphore(1);
 
-        Thread tomBombadil = new Thread(new TomBombadil());
-        Battle battle = new Battle(arrayFull);
+
+        Battle battle = new Battle(arrayFull, tomBombadil);
 
         //creamos las arrays de hilos
         Thread[] orcs = new Thread[3];
@@ -57,13 +59,13 @@ public class Main {
         //metemos en array a los sauronWarriors
         for(int i = 0; i < sauronWarrior.length; i++){
             sauronWarrior[i] = new Thread (new SauronWarrior("SauronWarrior" + (i+1), 0,
-                    shieldSauron, swordSauron, daggerSauron, orcPotionProduct, battle, sauronBattle, arrayFull));
+                    shieldSauron, swordSauron, daggerSauron, orcPotionProduct, battle, arrayFull, tomBombadil));
         }
 
         //metemos en array a los iluvatarWarriors
         for(int i = 0; i < iluvatarWarrior.length; i++){
             iluvatarWarrior[i] = new Thread (new IluvatarWarrior("IluvatarWarrior" + (i+1), 0,
-                    shieldIluvatar, swordIluvatar, daggerIluvatar, istariBookProduct, battle, iluvatarBattle, arrayFull));
+                    shieldIluvatar, swordIluvatar, daggerIluvatar, istariBookProduct, battle, arrayFull, tomBombadil));
         }
 
 

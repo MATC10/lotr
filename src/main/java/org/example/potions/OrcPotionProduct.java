@@ -42,13 +42,13 @@ public class OrcPotionProduct {
         notify();
 
         //lanzamos mensaje para anunciar la recarga de energía
-        System.out.printf("El guerrero de sauron %s ha recargado energía y tiene ahora %f\n",
-                sauronWarrior.getName(), sauronWarrior.getEnergy());
+        System.out.printf("El guerrero de sauron %s ha recargado energía y tiene ahora %.2f, queda %.2f en la vasija\n",
+                sauronWarrior.getName(), sauronWarrior.getEnergy(), this.getQuantity());
 
 
     }
 
-    //TODO PUEDE QUE HAYA QUE QUITAR EL SYNCHHRONIZED
+
     public synchronized void produceOrcPotion(Orc orc) throws InterruptedException {
         while (this.quantity == MAX_QUANTITY) {
             wait();
@@ -71,7 +71,7 @@ public class OrcPotionProduct {
         notify();
 
         //lanzamos mensaje para anunciar la recarga de poción
-        System.out.printf("%s ha recargado la poción, tiene ahora %f\n",
+        System.out.printf("%s ha recargado la vasija, tiene ahora %.2f\n",
                 orc.getName(), this.getQuantity());
 
     }

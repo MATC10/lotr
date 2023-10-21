@@ -1,24 +1,23 @@
 package org.example.battle;
 
 
-import org.example.factions.Warrior;
-
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 
 public  class Battle {
 
     private CountDownLatch arrayFull;
+    TomBombadil tomBombadil;
 
-    public Battle(CountDownLatch arrayFull) {
+    public Battle(CountDownLatch arrayFull, TomBombadil tomBombadil) {
         this.arrayFull = arrayFull;
+        this.tomBombadil = tomBombadil;
     }
 
 
 
     public void battle(){
 
-        TomBombadil.compareEnergy();
+        tomBombadil.compareEnergy();
 
         try {
 

@@ -13,29 +13,32 @@ public class IluvatarWarrior extends Warrior implements Runnable {
     private volatile Semaphore shieldIluvatar;
     private volatile Semaphore swordIluvatar;
     private volatile Semaphore daggerIluvatar;
-    private Semaphore iluvatarBattle;
+
     private CountDownLatch arrayFull;
+    private volatile TomBombadil tomBombadil;
 
     private final Object lock = new Object();
 
     public IluvatarWarrior(String name, int energy, Semaphore shieldIluvatar, Semaphore swordIluvatar,
                            Semaphore daggerIluvatar, IstariBookProduct istariBookProduct, Battle battle,
-                           Semaphore iluvatarBattle, CountDownLatch arrayFull) {
+                           CountDownLatch arrayFull, TomBombadil tomBombadil) {
         super(name, energy);
         this.istariBookProduct = istariBookProduct;
         this.battle = battle;
         this.shieldIluvatar = shieldIluvatar;
         this.swordIluvatar = swordIluvatar;
         this.daggerIluvatar = daggerIluvatar;
-        this.iluvatarBattle = iluvatarBattle;
         this.arrayFull = arrayFull;
+        this.tomBombadil = tomBombadil;
     }
 
     @Override
     public void run() {
         while (true) {
             try {
+
                 istariBookProduct.consumeIstariBook(this);
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -46,7 +49,6 @@ public class IluvatarWarrior extends Warrior implements Runnable {
                 swordIluvatar.acquire();
                 daggerIluvatar.acquire();
 
-
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -54,49 +56,37 @@ public class IluvatarWarrior extends Warrior implements Runnable {
 
             if(this.getEnergy() > 0 && (shieldIluvatar.availablePermits () > 0) &&
                     (swordIluvatar.availablePermits() > 0) && daggerIluvatar.availablePermits() > 0){
-                TomBombadil.getBattleArray()[1] = this;
+
+                tomBombadil.getBattleArray()[1] = this;
+
+                arrayFull.countDown();
 
                 try {
-                    if(TomBombadil.getBattleArray()[0] == null || TomBombadil.getBattleArray()[1] == null){
+
+                    while (tomBombadil.getBattleArray()[0] == null || tomBombadil.getBattleArray()[1] == null){
                         synchronized (lock){
                             lock.wait();
                         }
                     }
 
-                    //la array está llena
-                    if (TomBombadil.getBattleArray()[0] != null && TomBombadil.getBattleArray()[1] != null) {
-                        synchronized (lock) {
-                            lock.notify();
-                        }
-                    }
-
-                    arrayFull.countDown();
-
-
-                    iluvatarBattle.acquire();
-
-
-
-
-
                     this.battle.battle();
                     this.setEnergy(0);
-
-
-                    iluvatarBattle.release();
 
                 }   catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
-
-                shieldIluvatar.release();
-                swordIluvatar.release();
-                daggerIluvatar.release();
+                //la array está llena
+                if (tomBombadil.getBattleArray()[0] != null && tomBombadil.getBattleArray()[1] != null) {
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                }
             }
-
-
+            shieldIluvatar.release();
+            swordIluvatar.release();
+            daggerIluvatar.release();
 
         }
     }
+
 }
