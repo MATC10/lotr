@@ -27,8 +27,6 @@ public class Main {
         Semaphore shieldIluvatar = new Semaphore(3);
         Semaphore swordIluvatar = new Semaphore(3);
         Semaphore daggerIluvatar = new Semaphore(3);
-        Semaphore sauronBattle = new Semaphore(1);
-        Semaphore iluvatarBattle = new Semaphore(1);
 
 
         Battle battle = new Battle(arrayFull, tomBombadil);
